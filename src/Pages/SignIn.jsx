@@ -8,7 +8,7 @@ import {
   CardHeader,
 } from "../components/ui/card";
 import { ThemeContext } from "../components/context/Theme-provider";
-import { Moon, Sun, UserRound } from "lucide-react";
+import { Mail, Moon, Shield, Sun, UserRound } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
@@ -95,8 +95,9 @@ function SignIn() {
               )}
               <label
                 htmlFor="email"
-                className="block text-sm font-semibold mb-1 text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
               >
+                <Mail className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
                 Email
               </label>
               <Input
@@ -115,8 +116,9 @@ function SignIn() {
               )}
               <label
                 htmlFor="password"
-                className="block text-sm font-semibold mb-1 text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
               >
+                <Shield className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
                 Password
               </label>
               <Input
