@@ -19,7 +19,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgetPassword />} />
         </Routes>
       </ThemeProvider>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-center" richColors />
     </>
   );
 }
