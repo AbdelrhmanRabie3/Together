@@ -141,7 +141,7 @@ function SignIn() {
               )}
               <div className="flex justify-end py-2">
                 <Link
-                  to="/forgot-password"
+                  to="/ForgetPassword"
                   className="text-gray-600 dark:text-gray-300 text-xs hover:underline focus:outline-none"
                 >
                   Forgot password?

@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<Feed />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgetPassword />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
         </Routes>
       </ThemeProvider>
       <Toaster position="top-center" richColors />
