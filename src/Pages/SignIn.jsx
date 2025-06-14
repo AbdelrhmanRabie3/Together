@@ -17,6 +17,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+//firebase import
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 function SignIn() {
   const [generalError, setGeneralError] = useState("");
   const { isDark, toggleTheme } = useContext(ThemeContext);
@@ -46,16 +48,24 @@ function SignIn() {
   const onSubmit = async (values) => {
     setGeneralError("");
     try {
-      // await signInWithEmailAndPassword(auth, values.email, values.password);
+      const auth = getAuth();
+      const userCredintials = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
       navigate("/");
       toast.success("Signed in successfully");
     } catch (err) {
+      console.log(err.code);
+      
+      let errorMessage = "Invalid email or password";
       setError("root", {
         type: "manual",
-        message: "Invalid email or password",
+        message: errorMessage,
       });
-      setGeneralError("Sign-in failed: Invalid credentials");
-      toast.error("Sign-in failed: Invalid credentials");
+      setGeneralError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -64,7 +74,7 @@ function SignIn() {
       <Helmet>
         <title>Login</title>
       </Helmet>
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 relative">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br  from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 relative">
         <Button
           className="fixed top-5 right-5 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md rounded-full transition-shadow shadow-md hover:shadow-lg text-foreground"
           onClick={toggleTheme}
@@ -88,11 +98,6 @@ function SignIn() {
           </CardHeader>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <CardContent className="space-y-5 px-6 py-3">
-              {errors.root && (
-                <div className="text-destructive text-center text-sm font-semibold pb-2">
-                  {errors.root.message}
-                </div>
-              )}
               <label
                 htmlFor="email"
                 className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
@@ -149,6 +154,11 @@ function SignIn() {
               >
                 {isSubmitting ? "Signing In..." : "Sign In"}
               </Button>
+              {errors.root && (
+                <div className="text-destructive text-center text-sm font-semibold pb-2">
+                  {errors.root.message}
+                </div>
+              )}
             </CardContent>
           </form>
           <CardFooter className="py-6">

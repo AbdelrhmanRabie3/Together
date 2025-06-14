@@ -17,9 +17,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 //firebase imports
-import { getAuth,createUserWithEmailAndPassword,updateProfile } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { db } from "../firebase.config";
-import { setDoc,doc,serverTimestamp } from "firebase/firestore";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 
 function SignUp() {
   const [generalError, setGeneralError] = useState("");
@@ -55,18 +59,22 @@ function SignUp() {
   const onSubmit = async (values) => {
     setGeneralError("");
     try {
-      const auth=getAuth()
-      const userCredential=await createUserWithEmailAndPassword(auth,values.email,values.password)
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
       await updateProfile(userCredential.user, {
         displayName: values.username,
       });
       console.log(userCredential);
-      await setDoc(doc(db,"users",userCredential.user.uid),{
+      await setDoc(doc(db, "users", userCredential.user.uid), {
         userId: userCredential.user.uid,
         username: values.username,
         email: values.email,
-        createdAt:serverTimestamp()
-      })
+        createdAt: serverTimestamp(),
+      });
       navigate("/signin");
       toast.success("Account created successfully! Please sign in.");
     } catch (err) {
@@ -134,14 +142,6 @@ function SignUp() {
                   errors.username ? "border-destructive ring-destructive" : ""
                 }
               />
-              {errors.username && (
-                <div
-                  className="text-destructive text-xs mt-1 font-medium"
-                  id="username-error"
-                >
-                  {errors.username.message}
-                </div>
-              )}
 
               <label
                 htmlFor="email"
@@ -217,6 +217,14 @@ function SignUp() {
               >
                 {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
+              {errors.username && (
+                <div
+                  className="text-destructive text-xs mt-1 font-medium"
+                  id="username-error"
+                >
+                  {errors.username.message}
+                </div>
+              )}
             </CardContent>
           </form>
           <CardFooter className="py-6">

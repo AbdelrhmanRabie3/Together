@@ -12,7 +12,6 @@ function App() {
     <>
       
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <NavBar/>
         <Routes>
           <Route path="/" element={<Feed />} />
           <Route path="/signin" element={<SignIn />} />

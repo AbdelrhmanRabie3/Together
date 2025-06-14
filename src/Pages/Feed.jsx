@@ -1,5 +1,10 @@
+import NavBar from './../components/ui/NavBar';
 function Feed() {
-    return <><h1>Feeedddd</h1></>
+
+    return <>
+    <NavBar/>
+    
+    <h1>Feeedddd</h1></>
 }
 
 export default Feed
