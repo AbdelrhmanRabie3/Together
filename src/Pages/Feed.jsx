@@ -14,8 +14,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuGroup,
-  DropdownMenuShortcut,
 } from "@/components/ui/Dropdown-menu";
 import {
   MessageCircle,
@@ -44,8 +42,10 @@ import { db } from "../firebase.config";
 import {
   addDoc,
   collection,
+  doc,
   onSnapshot,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 function Feed() {
@@ -53,8 +53,9 @@ function Feed() {
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
   const [postsLoading, setPostsLoading] = useState(true);
-  const [postSubmitting, setPostSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [editImageFile, setEditImageFile] = useState(null);
+  const [editingPostId, setEditingPostId] = useState(null);
   // console.log(posts);
   //Get posts from firebase db
   useEffect(() => {
@@ -132,7 +133,9 @@ function Feed() {
     mode: "onChange",
   });
   const onSubmitPost = async (data) => {
-    setPostSubmitting(true);
+    if (imageFile && !validateImage(imageFile)) {
+      return;
+    }
     try {
       const imageUrl = await uploadImageToImgBb(imageFile);
       await addDoc(collection(db, "posts"), {
@@ -142,16 +145,51 @@ function Feed() {
         timestamp: serverTimestamp(),
         likes: [],
         comments: [],
-         imageUrl,
+        imageUrl,
       });
       toast.success("Post created successfully!");
-      setPostSubmitting(false)
       resetPost();
       setImageFile(null);
     } catch (error) {
       toast.error("Failed to create post.");
       console.error(error);
-      setPostSubmitting(false)
+    }
+  };
+
+  //Edit post
+  // Edit post form
+  const {
+    register: registerEdit,
+    handleSubmit: handleSubmitEdit,
+    formState: { errors: editErrors, isSubmitting: isSubmittingEdit },
+    reset: resetEdit,
+    setValue: setEditValue,
+  } = useForm({
+    resolver: zodResolver(postSchema),
+    mode: "onChange",
+  });
+  const onSubmitEdit = async (data) => {
+    if (editImageFile && !validateImage(editImageFile)) {
+      return;
+    }
+    try {
+      const currentPost = posts.find((p) => p.id === editingPostId);
+      let imageUrl = currentPost?.imageUrl ?? null;
+      if (editImageFile) {
+        imageUrl = await uploadImageToImgBb(editImageFile);
+      }
+      await updateDoc(doc(db, "posts", editingPostId), {
+        content: data.content,
+        timestamp: serverTimestamp(),
+        imageUrl: imageUrl,
+      });
+      setEditingPostId(null);
+      setEditImageFile(null);
+      resetEdit();
+      toast.success("Post updated successfully!");
+    } catch (err) {
+      toast.error("Failed to update post.");
+      console.error(err);
     }
   };
 
@@ -241,45 +279,109 @@ function Feed() {
                         {post.timestamp?.toDate().toLocaleString()}
                       </p>
                     </div>
-                    {user?.uid === post.userId && (
-                      <div className="relative">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-10 w-10 rounded-full hover:bg-blue-100/50 dark:hover:bg-zinc-800/50"
-                              aria-label="Post options"
-                            >
-                              <MoreHorizontal className="h-6 w-6 text-zinc-500" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-48 bg-white/95 dark:bg-zinc-800/95 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-xl">
-                            <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-blue-50 dark:hover:bg-zinc-700 rounded-md mx-1 my-1">
-                              <Edit className="h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200">
-                              <Trash2 className=" hover:text-red-700 h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    )}
                   </div>
+                  {user?.uid === post.userId && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-10 w-10 rounded-full hover:bg-blue-100/50 dark:hover:bg-zinc-800/50"
+                          aria-label="Post options"
+                        >
+                          <MoreHorizontal className="h-6 w-6 text-zinc-500" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 bg-white/95 dark:bg-zinc-800/95 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-700/50 rounded-2xl shadow-xl">
+                        <DropdownMenuItem
+                          className="flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-blue-50 dark:hover:bg-zinc-700 rounded-md mx-1 my-1"
+                          onClick={() => {
+                            setEditingPostId(post.id);
+                            setEditValue("content", post.content);
+                          }}
+                        >
+                          <Edit className="h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200">
+                          <Trash2 className=" hover:text-red-700 h-4 w-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </CardHeader>
                 <CardContent className="p-6 space-y-4">
-                  <p className="text-zinc-800 dark:text-zinc-200 text-lg font-medium mb-6">
-                    {post.content}
-                  </p>
-                  {post.imageUrl && (
-                    <img
-                      src={post.imageUrl}
-                      alt="Post image"
-                      className="w-full h-auto max-h-80  rounded-2xl shadow-md"
-                      loading="lazy"
-                    />
+                  {editingPostId === post.id ? (
+                    <form onSubmit={handleSubmitEdit(onSubmitEdit)} noValidate>
+                      <Input
+                        className="bg-transparent border border-zinc-300 dark:border-zinc-700 text-lg mb-4"
+                        aria-label="Edit post content"
+                        {...registerEdit("content")}
+                      />
+                      {editErrors.content && (
+                        <p className="text-destructive text-sm font-medium">
+                          {editErrors.content.message}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-3 mb-4">
+                        <label
+                          htmlFor={`edit-image-upload-${post.id}`}
+                          className="cursor-pointer flex items-center gap-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-violet-400 transition-colors"
+                        >
+                          <Image className="h-6 w-6" />
+                          Change Image
+                        </label>
+                        <input
+                          id={`edit-image-upload-${post.id}`}
+                          type="file"
+                          accept="image/jpeg,image/png"
+                          className="hidden"
+                          onChange={(e) => setEditImageFile(e.target.files[0])}
+                        />
+                        {editImageFile && (
+                          <span className="text-sm text-zinc-500 dark:text-zinc-400 truncate max-w-[200px]">
+                            {editImageFile.name}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-3">
+                        <Button
+                          type="submit"
+                          className="h-10 px-6 rounded-full font-bold text-sm bg-gradient-to-r from-blue-500 to-violet-700 hover:from-blue-600 hover:to-violet-800 shadow-lg transition-all duration-200 hover:scale-105"
+                          disabled={isSubmittingEdit}
+                          aria-label="Save edited post"
+                        >
+                          {isSubmittingEdit ? "Saving..." : "Save"}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="h-10 px-6 rounded-full text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                          onClick={() => {
+                            setEditingPostId(null);
+                            setEditImageFile(null);
+                             resetEdit()
+                          }}
+                          aria-label="Cancel edit"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      <p className="text-zinc-800 dark:text-zinc-200 text-lg font-medium mb-6">
+                        {post.content}
+                      </p>
+                      {post.imageUrl && (
+                        <img
+                          src={post.imageUrl}
+                          alt="Post image"
+                          className="w-full h-auto max-h-80  rounded-2xl shadow-md"
+                          loading="lazy"
+                        />
+                      )}
+                    </>
                   )}
                 </CardContent>
               </Card>
