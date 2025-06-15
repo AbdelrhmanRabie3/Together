@@ -42,6 +42,7 @@ import { db } from "../firebase.config";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   serverTimestamp,
@@ -157,7 +158,6 @@ function Feed() {
   };
 
   //Edit post
-  // Edit post form
   const {
     register: registerEdit,
     handleSubmit: handleSubmitEdit,
@@ -193,6 +193,17 @@ function Feed() {
     }
   };
 
+  // Delete post
+     const deletePost = async (postId) => {
+       try {
+         await deleteDoc(doc(db, "posts", postId));
+         toast.success("Post deleted successfully!");
+       } catch (err) {
+         toast.error("Failed to delete post.");
+         console.error(err);
+       }
+     };
+     
   if (postsLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-primary animate-fade-in-up">
@@ -303,7 +314,10 @@ function Feed() {
                           <Edit className="h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200">
+                        <DropdownMenuItem
+                          className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200"
+                          onClick={() => deletePost(post.id)}
+                        >
                           <Trash2 className=" hover:text-red-700 h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
@@ -360,7 +374,7 @@ function Feed() {
                           onClick={() => {
                             setEditingPostId(null);
                             setEditImageFile(null);
-                             resetEdit()
+                            resetEdit();
                           }}
                           aria-label="Cancel edit"
                         >
