@@ -11,14 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/Dropdown-menu";
+import { AuthContext } from "../context/AuthContextProvider";
 function NavBar() {
   const { isDark, toggleTheme } = useContext(ThemeContext);
+  const { user, loading } = useContext(AuthContext);
   const auth = getAuth();
-  const [user, setUser] = useState({});
   const navigate = useNavigate();
-  useEffect(() => {
-    setUser(auth.currentUser);
-  }, []);
 
   async function handleLogOut() {
     try {

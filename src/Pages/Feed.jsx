@@ -28,10 +28,14 @@ import {
   CardHeader,
   CardFooter,
 } from "../components/ui/Card";
+
+import { z } from "zod";
 //firebase imports
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
 import { collection, onSnapshot } from "firebase/firestore";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function Feed() {
   const { isDark } = useContext(ThemeContext);
@@ -39,7 +43,7 @@ function Feed() {
   const auth = getAuth();
 
   console.log(posts);
-
+//Get posts from firebase db
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
       const postsData = snapshot.docs.map((doc) => ({
@@ -57,6 +61,25 @@ function Feed() {
     });
     return () => unsubscribe();
   }, [db]);
+
+//post validation
+  const postSchema = z.object({
+    content: z
+      .string()
+      .min(1, "Content is required.")
+      .max(500, "Max 500 characters."),
+  });
+
+//create post
+  const {
+    register: registerPost,
+    handleSubmit: handleSubmitPost,
+    formState: { errors: postErrors, isSubmitting: isSubmittingPost },
+    reset: resetPost,
+  } = useForm({
+    resolver: zodResolver(postSchema),
+    mode: "onChange",
+  });
   return (
     <>
       <NavBar />
@@ -67,7 +90,7 @@ function Feed() {
               <form noValidate>
                 <CardContent className="pt-6 space-y-4">
                   <Input />
-
+                  {/* {registerPost("content")} */}
                   <div className="flex items-center gap-2">
                     <label
                       htmlFor="image-upload"
