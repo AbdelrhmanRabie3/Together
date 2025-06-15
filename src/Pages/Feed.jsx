@@ -59,6 +59,9 @@ function Feed() {
   const [imageFile, setImageFile] = useState(null);
   const [editImageFile, setEditImageFile] = useState(null);
   const [editingPostId, setEditingPostId] = useState(null);
+  const [commentText, setCommentText] = useState({});
+  const [showComments, setShowComments] = useState({});
+  const [isCommenting, setIsCommenting] = useState({});
   // console.log(posts);
   //Get posts from firebase db
   useEffect(() => {
@@ -232,6 +235,34 @@ function Feed() {
     }
   };
 
+  //Handle comments
+  const handleComment = async (postId, commentText) => {
+    if (!user) {
+      toast.error("Please log in to comment");
+      return;
+    }
+
+    if (!commentText.trim()) {
+      toast.error("Comment cannot be empty");
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, "posts", postId), {
+        comments: arrayUnion({
+          id: Date.now().toString(),
+          userId: user.uid,
+          username: user.displayName,
+          text: commentText,
+          timestamp: new Date(),
+        }),
+      });
+      toast.success("Comment added!");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment");
+    }
+  };
   if (postsLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-primary animate-fade-in-up">
@@ -304,6 +335,8 @@ function Feed() {
           {posts.map((post) => {
             const isLiked = post.likes?.includes(user?.uid);
             const likesCount = post.likes?.length || 0;
+            const commentsCount = post.comments?.length || 0;
+
             return (
               <Card
                 key={post.id}
@@ -344,10 +377,7 @@ function Feed() {
                           <Edit className="h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200"
-                          onClick={() => deletePost(post.id)}
-                        >
+                        <DropdownMenuItem className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 rounded-b-xl transition-all duration-200">
                           <Trash2 className=" hover:text-red-700 h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
@@ -355,6 +385,7 @@ function Feed() {
                     </DropdownMenu>
                   )}
                 </CardHeader>
+
                 <CardContent className="p-6 space-y-4">
                   {editingPostId === post.id ? (
                     <form onSubmit={handleSubmitEdit(onSubmitEdit)} noValidate>
@@ -396,7 +427,7 @@ function Feed() {
                           disabled={isSubmittingEdit}
                           aria-label="Save edited post"
                         >
-                          {isSubmittingEdit ? "Saving..." : "Save"}
+                          Save
                         </Button>
                         <Button
                           variant="ghost"
@@ -421,16 +452,17 @@ function Feed() {
                         <img
                           src={post.imageUrl}
                           alt="Post image"
-                          className="w-full h-auto max-h-80  rounded-2xl shadow-md"
+                          className="w-full h-auto max-h-80 rounded-2xl shadow-md"
                           loading="lazy"
                         />
                       )}
                     </>
                   )}
                 </CardContent>
+
+                {/* Likes and Comments Section */}
                 <CardFooter className="px-6 pb-6 pt-0">
                   <div className="w-full space-y-4">
-                    {/* Action Buttons */}
                     <div className="flex items-center gap-6 pt-2 border-t border-zinc-200 dark:border-zinc-800">
                       <Button
                         variant="ghost"
@@ -452,7 +484,100 @@ function Feed() {
                           {likesCount} {likesCount === 1 ? "Like" : "Likes"}
                         </span>
                       </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all duration-200"
+                        onClick={() =>
+                          setShowComments((prev) => ({
+                            ...prev,
+                            [post.id]: !prev[post.id],
+                          }))
+                        }
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        <span className="font-medium">
+                          {commentsCount}{" "}
+                          {commentsCount === 1 ? "Comment" : "Comments"}
+                        </span>
+                      </Button>
                     </div>
+                    {showComments[post.id] && (
+                      <div className="space-y-4">
+                        {user && (
+                          <div className="flex gap-3">
+                            <Input
+                              placeholder="Write a comment..."
+                              value={commentText[post.id] || ""}
+                              onChange={(e) =>
+                                setCommentText((prev) => ({
+                                  ...prev,
+                                  [post.id]: e.target.value,
+                                }))
+                              }
+                              className="flex-1"
+                              onKeyPress={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleComment(post.id, commentText[post.id]);
+                                  setCommentText((prev) => ({
+                                    ...prev,
+                                    [post.id]: "",
+                                  }));
+                                }
+                              }}
+                            />
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                handleComment(post.id, commentText[post.id]);
+                                setCommentText((prev) => ({
+                                  ...prev,
+                                  [post.id]: "",
+                                }));
+                              }}
+                              disabled={
+                                !commentText[post.id]?.trim() ||
+                                isCommenting[post.id]
+                              }
+                              className="px-4"
+                            >
+                              <Send className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                        <div className="space-y-3 max-h-60 overflow-y-auto">
+                          {post.comments?.map((comment, index) => (
+                            <div
+                              key={comment.id || index}
+                              className="flex gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl"
+                            >
+                              <span className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-tr from-blue-400 to-violet-500 text-white shadow-sm text-sm font-bold flex-shrink-0">
+                                {comment.username?.charAt(0).toUpperCase()}
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
+                                    {comment.username}
+                                  </span>
+                                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {comment.timestamp instanceof Date
+                                      ? comment.timestamp.toLocaleString()
+                                      : new Date(
+                                          comment.timestamp?.seconds * 1000
+                                        ).toLocaleString()}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-zinc-700 dark:text-zinc-300 break-words">
+                                  {comment.text}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardFooter>
               </Card>

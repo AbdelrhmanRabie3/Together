@@ -7,6 +7,7 @@ import ForgetPassword from "./Pages/ForgetPassword";
 import { Toaster } from "sonner";
 import NavBar from "./components/ui/NavBar";
 import AuthContextProvider from "./components/context/AuthContextProvider";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <AuthContextProvider>
           <Routes>
             <Route path="/" element={<Feed />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
