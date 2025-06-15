@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Button } from "../components/ui/Button";
-import { Input } from "../components/ui/Input";
+import { Input } from "../components/ui/input";
 import {
   Card,
   CardContent,
@@ -56,7 +56,7 @@ function SignIn() {
       toast.success("Signed in successfully");
     } catch (err) {
       console.log(err.code);
-      
+
       let errorMessage = "Invalid email or password";
       setError("root", {
         type: "manual",

@@ -8,7 +8,7 @@ import {
 } from "../components/ui/Card";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Sun, Lock } from "lucide-react";
-import { Input } from "../components/ui/Input";
+import { Input } from "../components/ui/input";
 import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
@@ -68,7 +68,11 @@ function ForgetPassword() {
           variant="ghost"
           aria-label="Toggle theme"
         >
-          {isDark ? <Sun className="h-5 w-5 animate-spin-slow" /> : <Moon className="h-5 w-5 animate-pulse" />}
+          {isDark ? (
+            <Sun className="h-5 w-5 animate-spin-slow" />
+          ) : (
+            <Moon className="h-5 w-5 animate-pulse" />
+          )}
         </Button>
 
         <Card className="w-full max-w-md shadow-2xl rounded-3xl border border-zinc-200 dark:border-zinc-800/40 backdrop-blur-lg bg-white/80 dark:bg-zinc-900/95 animate-fade-in-up">

@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
 } from "../components/ui/Card";
-import { Input } from "../components/ui/Input";
+import { Input } from "../components/ui/input";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, User, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router";

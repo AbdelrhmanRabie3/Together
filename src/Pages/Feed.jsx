@@ -7,7 +7,7 @@ import { ThemeContext } from "../components/context/ThemeContextProvider";
 import axios from "axios";
 
 import NavBar from "./../components/ui/NavBar";
-import { Input } from "../components/ui/Input";
+import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/Button";
 import {
   DropdownMenu,
