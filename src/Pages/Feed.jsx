@@ -1,4 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthContext } from "../components/context/AuthContextProvider";
+import { ThemeContext } from "../components/context/ThemeContextProvider";
+
+import axios from "axios";
+
 import NavBar from "./../components/ui/NavBar";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/button";
@@ -21,7 +28,7 @@ import {
   MoreHorizontal,
   Loader2,
 } from "lucide-react";
-import { ThemeContext } from "../components/context/ThemeContextProvider";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -30,7 +37,7 @@ import {
   CardFooter,
 } from "../components/ui/Card";
 
-import { z } from "zod";
+import { nullable, z } from "zod";
 //firebase imports
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
@@ -40,17 +47,15 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthContext } from "../components/context/AuthContextProvider";
-import { toast } from "sonner";
 
 function Feed() {
   const { isDark } = useContext(ThemeContext);
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
   const [postsLoading, setPostsLoading] = useState(true);
-  console.log(posts);
+  const [postSubmitting, setPostSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  // console.log(posts);
   //Get posts from firebase db
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
@@ -67,8 +72,7 @@ function Feed() {
         )
       );
       setPostsLoading(false);
-      console.log(user);
-      
+      // console.log(user);
     });
     return () => unsubscribe();
   }, [db]);
@@ -81,6 +85,42 @@ function Feed() {
       .max(500, "Max 500 characters."),
   });
 
+  //image validation
+  const validateImage = (file) => {
+    if (!file) return true;
+    const maxSize = 32 * 1024 * 1024; //32 MB
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (file.size > maxSize) {
+      toast.error("Image must be less than 32 MB.");
+      return false;
+    }
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only JPG, JPEG, PNG images are supported.");
+      return false;
+    }
+    return true;
+  };
+
+  //upload image to imagebb
+  const uploadImageToImgBb = async (file) => {
+    if (!file) {
+      return null;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const response = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_IMGBB_API_KEY
+        }`,
+        formData
+      );
+      console.log(response);
+      return response.data.data.url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //create post
   const {
     register: registerPost,
@@ -92,7 +132,9 @@ function Feed() {
     mode: "onChange",
   });
   const onSubmitPost = async (data) => {
+    setPostSubmitting(true);
     try {
+      const imageUrl = await uploadImageToImgBb(imageFile);
       await addDoc(collection(db, "posts"), {
         userId: user.uid,
         displayName: user.displayName,
@@ -100,14 +142,16 @@ function Feed() {
         timestamp: serverTimestamp(),
         likes: [],
         comments: [],
-        imageUrl: null,
+         imageUrl,
       });
       toast.success("Post created successfully!");
+      setPostSubmitting(false)
       resetPost();
-      // setImageFile(null);
+      setImageFile(null);
     } catch (error) {
       toast.error("Failed to create post.");
       console.error(error);
+      setPostSubmitting(false)
     }
   };
 
@@ -155,9 +199,15 @@ function Feed() {
                     <input
                       id="image-upload"
                       type="file"
-                      accept="image/jpeg,image/png"
+                      accept="image/jpeg,image/png,image/jpg"
                       className="hidden"
+                      onChange={(e) => setImageFile(e.target.files[0])}
                     />
+                    {imageFile && (
+                      <span className="text-sm text-zinc-500 dark:text-zinc-400 truncate max-w-[200px]">
+                        {imageFile.name}
+                      </span>
+                    )}
                   </div>
                 </CardContent>
                 <CardFooter className="px-6 pb-4">
@@ -175,8 +225,6 @@ function Feed() {
           )}
 
           {posts.map((post) => {
-            console.log(post);
-
             return (
               <Card
                 key={post.id}
