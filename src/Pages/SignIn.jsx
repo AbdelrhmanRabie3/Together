@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Button } from "../components/ui/Button";
-
+import { Input } from "../components/ui/Input";
 import {
   Card,
   CardContent,
@@ -9,7 +9,6 @@ import {
 } from "../components/ui/Card";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, UserRound } from "lucide-react";
-import { Input } from "../components/ui/Input";
 import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
