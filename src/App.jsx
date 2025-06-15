@@ -9,6 +9,7 @@ import NavBar from "./components/ui/NavBar";
 import AuthContextProvider from "./components/context/AuthContextProvider";
 import Profile from "./Pages/Profile";
 import ProtectedRoute from "./components/protectedRoute";
+import Error from "./components/Error";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="*" element={<Error />}/>
           </Routes>
         </AuthContextProvider>
       </ThemeProvider>
