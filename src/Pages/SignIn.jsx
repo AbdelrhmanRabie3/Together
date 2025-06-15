@@ -14,7 +14,6 @@ import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { Helmet } from "react-helmet-async";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //firebase import
@@ -71,9 +70,6 @@ function SignIn() {
 
   return (
     <>
-      <Helmet>
-        <title>Login</title>
-      </Helmet>
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br  from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 relative">
         <Button
           className="fixed top-5 right-5 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md rounded-full transition-shadow shadow-md hover:shadow-lg text-foreground"
