@@ -11,10 +11,10 @@ import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, UserRound } from "lucide-react";
 import { Input } from "../components/ui/Input";
 import { Link, useNavigate } from "react-router";
-import { Helmet } from "react-helmet";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { Helmet } from "react-helmet-async";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //firebase import
