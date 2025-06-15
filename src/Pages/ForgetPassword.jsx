@@ -1,14 +1,14 @@
 import { useContext } from "react";
-import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/Button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../components/ui/card";
+} from "../components/ui/Card";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Sun, Lock } from "lucide-react";
-import { Input } from "../components/ui/input";
+import { Input } from "../components/ui/Input";
 import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
 import { toast, Toaster } from "sonner";
