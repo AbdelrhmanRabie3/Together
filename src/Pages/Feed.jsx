@@ -41,6 +41,8 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -194,16 +196,42 @@ function Feed() {
   };
 
   // Delete post
-     const deletePost = async (postId) => {
-       try {
-         await deleteDoc(doc(db, "posts", postId));
-         toast.success("Post deleted successfully!");
-       } catch (err) {
-         toast.error("Failed to delete post.");
-         console.error(err);
-       }
-     };
-     
+  const deletePost = async (postId) => {
+    try {
+      await deleteDoc(doc(db, "posts", postId));
+      toast.success("Post deleted successfully!");
+    } catch (err) {
+      toast.error("Failed to delete post.");
+      console.error(err);
+    }
+  };
+
+  //Handle Likes
+  const handleLike = async (postId) => {
+    if (!user) {
+      toast.error("Please log in to like posts");
+      return;
+    }
+
+    try {
+      const postRef = doc(db, "posts", postId);
+      const post = posts.find((p) => p.id === postId);
+      const isLiked = post.likes.includes(user.uid);
+      if (isLiked) {
+        await updateDoc(postRef, {
+          likes: arrayRemove(user.uid),
+        });
+      } else {
+        await updateDoc(postRef, {
+          likes: arrayUnion(user.uid),
+        });
+      }
+    } catch (error) {
+      console.error("Error updating like:", error);
+      toast.error("Failed to update like");
+    }
+  };
+
   if (postsLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-primary animate-fade-in-up">
@@ -274,6 +302,8 @@ function Feed() {
           )}
 
           {posts.map((post) => {
+            const isLiked = post.likes?.includes(user?.uid);
+            const likesCount = post.likes?.length || 0;
             return (
               <Card
                 key={post.id}
@@ -398,6 +428,33 @@ function Feed() {
                     </>
                   )}
                 </CardContent>
+                <CardFooter className="px-6 pb-6 pt-0">
+                  <div className="w-full space-y-4">
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-6 pt-2 border-t border-zinc-200 dark:border-zinc-800">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`flex items-center gap-2 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all duration-200 ${
+                          isLiked
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-zinc-600 dark:text-zinc-400"
+                        }`}
+                        onClick={() => handleLike(post.id)}
+                        disabled={!user}
+                      >
+                        <Heart
+                          className={`h-5 w-5 transition-all duration-200 ${
+                            isLiked ? "fill-current" : ""
+                          }`}
+                        />
+                        <span className="font-medium">
+                          {likesCount} {likesCount === 1 ? "Like" : "Likes"}
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                </CardFooter>
               </Card>
             );
           })}
