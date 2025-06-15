@@ -8,7 +8,7 @@ import axios from "axios";
 
 import NavBar from "./../components/ui/NavBar";
 import { Input } from "../components/ui/Input";
-import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,

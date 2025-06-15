@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ThemeContextProvider";
 import { LogOut, Moon, Sun, UserRound } from "lucide-react";
-import { Button } from "./button";
+import { Button } from "./Button";
 import { getAuth } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
