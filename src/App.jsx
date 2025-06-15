@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import NavBar from "./components/ui/NavBar";
 import AuthContextProvider from "./components/context/AuthContextProvider";
 import Profile from "./Pages/Profile";
+import ProtectedRoute from "./components/protectedRoute";
 
 function App() {
   return (
@@ -16,7 +17,14 @@ function App() {
         <AuthContextProvider>
           <Routes>
             <Route path="/" element={<Feed />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgetPassword" element={<ForgetPassword />} />
