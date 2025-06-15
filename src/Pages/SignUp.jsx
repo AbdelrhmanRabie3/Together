@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
 } from "../components/ui/Card";
+import { Input } from "../components/ui/Input";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, User, UserRound } from "lucide-react";
-import { Input } from "../components/ui/Input";
 import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
 import { z } from "zod";
