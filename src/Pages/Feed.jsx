@@ -19,6 +19,7 @@ import {
   Heart,
   Image,
   MoreHorizontal,
+  Loader2,
 } from "lucide-react";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 
@@ -33,17 +34,24 @@ import { z } from "zod";
 //firebase imports
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
-import { collection, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthContext } from "../components/context/AuthContextProvider";
+import { toast } from "sonner";
 
 function Feed() {
   const { isDark } = useContext(ThemeContext);
   const [posts, setPosts] = useState([]);
-  const auth = getAuth();
-
+  const { user } = useContext(AuthContext);
+  const [postsLoading, setPostsLoading] = useState(true);
   console.log(posts);
-//Get posts from firebase db
+  //Get posts from firebase db
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
       const postsData = snapshot.docs.map((doc) => ({
@@ -58,11 +66,14 @@ function Feed() {
           (a, b) => b.timestamp?.toMillis() - a.timestamp?.toMillis()
         )
       );
+      setPostsLoading(false);
+      console.log(user);
+      
     });
     return () => unsubscribe();
   }, [db]);
 
-//post validation
+  //post validation
   const postSchema = z.object({
     content: z
       .string()
@@ -70,7 +81,7 @@ function Feed() {
       .max(500, "Max 500 characters."),
   });
 
-//create post
+  //create post
   const {
     register: registerPost,
     handleSubmit: handleSubmitPost,
@@ -80,17 +91,59 @@ function Feed() {
     resolver: zodResolver(postSchema),
     mode: "onChange",
   });
+  const onSubmitPost = async (data) => {
+    try {
+      await addDoc(collection(db, "posts"), {
+        userId: user.uid,
+        displayName: user.displayName,
+        content: data.content,
+        timestamp: serverTimestamp(),
+        likes: [],
+        comments: [],
+        imageUrl: null,
+      });
+      toast.success("Post created successfully!");
+      resetPost();
+      // setImageFile(null);
+    } catch (error) {
+      toast.error("Failed to create post.");
+      console.error(error);
+    }
+  };
+
+  if (postsLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-primary animate-fade-in-up">
+        <Loader2 className="w-12 h-12 animate-spin text-blue-600 dark:text-violet-500" />
+        <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Loading feed...
+        </p>
+      </div>
+    );
+  }
   return (
     <>
       <NavBar />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 pt-20 pb-8 px-4">
         <div className="max-w-2xl mx-auto">
-          {auth.currentUser && (
+          {user && (
             <Card className="mb-6 shadow-xl rounded-2xl border border-zinc-200 dark:border-zinc-800/40 backdrop-blur-lg bg-white/80 dark:bg-zinc-900/95 animate-fade-in-up">
-              <form noValidate>
+              <form onSubmit={handleSubmitPost(onSubmitPost)} noValidate>
                 <CardContent className="pt-6 space-y-4">
-                  <Input />
-                  {/* {registerPost("content")} */}
+                  <Input
+                    {...registerPost("content")}
+                    placeholder="Share your thoughts..."
+                    className={`bg-transparent border-none text-lg font-medium placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-0 ${
+                      postErrors.content
+                        ? "border-destructive ring-destructive"
+                        : ""
+                    }`}
+                  />
+                  {postErrors.content && (
+                    <p className="text-destructive text-sm font-medium">
+                      {postErrors.content.message}
+                    </p>
+                  )}
                   <div className="flex items-center gap-2">
                     <label
                       htmlFor="image-upload"
@@ -110,10 +163,11 @@ function Feed() {
                 <CardFooter className="px-6 pb-4">
                   <Button
                     type="submit"
-                    className="ml-auto h-10 rounded-xl font-semibold text-sm bg-gradient-to-r from-blue-500 to-violet-700 hover:from-blue-600 hover:to-violet-800 focus:ring-2 focus:ring-blue-500/60 shadow-lg transition-all duration-200 disabled:opacity-70"
-                    // disabled={isSubmittingPost}
+                    className="ml-auto h-10 px-6 rounded-full font-bold text-sm bg-gradient-to-r from-blue-500 to-violet-700 hover:from-blue-600 hover:to-violet-800 focus:ring-2 focus:ring-blue-500/50 shadow-lg transition-all duration-200 disabled:opacity-50 hover:scale-105"
+                    disabled={isSubmittingPost || !user}
+                    aria-label="Submit post"
                   >
-                    {/* {isSubmittingPost ? "Posting..." : "Post"} */}
+                    {isSubmittingPost ? "Posting..." : "Post"}
                   </Button>
                 </CardFooter>
               </form>
@@ -131,15 +185,15 @@ function Feed() {
                 <CardHeader className="flex flex-row items-center justify-between pt-5">
                   <div className="flex items-center gap-3">
                     <span className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-blue-400 to-violet-500 text-white shadow-sm text-lg font-bold">
-                      {post.username?.charAt(0).toUpperCase()}
+                      {post.displayName?.charAt(0).toUpperCase()}
                     </span>
                     <div className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-blue-600 dark:hover:text-violet-400 text-sm">
-                      {post.username}
+                      {post.displayName}
                       <p className="text-xs text-zinc-500 dark:text-zinc-400">
                         {post.timestamp?.toDate().toLocaleString()}
                       </p>
                     </div>
-                    {auth.currentUser?.uid === post.userId && (
+                    {user?.uid === post.userId && (
                       <div className="relative">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
