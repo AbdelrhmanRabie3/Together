@@ -23,34 +23,17 @@ import {
 } from "firebase/auth";
 import { db } from "../firebase.config";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { signUpSchema } from "../../utils/schema";
 
 function SignUp() {
   const [generalError, setGeneralError] = useState("");
   const { isDark, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
-  const signUpSchema = z
-    .object({
-      username: z.string().min(1, { message: "username is required." }),
-      email: z
-        .string()
-        .min(1, { message: "Email is required." })
-        .email("Invalid email format"),
-      password: z
-        .string()
-        .trim()
-        .min(6, "Password must be at least 6 characters"),
-      confirmPassword: z.string().trim().min(1, "Confirm your password"),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    });
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    clearErrors,
   } = useForm({
     resolver: zodResolver(signUpSchema),
     mode: "onTouched",

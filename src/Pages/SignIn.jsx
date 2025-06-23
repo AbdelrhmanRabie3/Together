@@ -10,35 +10,24 @@ import {
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import { toast, Toaster } from "sonner";
+import { toast} from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //firebase import
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInSchema } from "../../utils/schema";
 function SignIn() {
   const [generalError, setGeneralError] = useState("");
   const { isDark, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
-  const signInSchema = z.object({
-    email: z
-      .string()
-      .min(1, {
-        message: "Email is required.",
-      })
-      .email("Invalid email format"),
-    password: z
-      .string()
-      .trim()
-      .min(6, "Password must be at least 6 characters"),
-  });
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    clearErrors,
   } = useForm({
     resolver: zodResolver(signInSchema),
     mode: "onTouched",
