@@ -11,22 +11,14 @@ import { Mail, Moon, Sun, Lock } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { forgotPasswordSchema } from "../utils/schema";
 
 function ForgetPassword() {
   const { isDark, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
-
-  const forgotPasswordSchema = z.object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required." })
-      .email("Invalid email format"),
-  });
-
   const {
     register,
     handleSubmit,

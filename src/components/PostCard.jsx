@@ -1,8 +1,8 @@
 import { toast } from "sonner";
-import { uploadImageToImgBb, validateImage } from "../../utils/imageUpload";
+import { uploadImageToImgBb, validateImage } from "../utils/imageUpload";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { postSchema } from "../../utils/schema";
+import { postSchema } from "../utils/schema";
 import { deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { useContext } from "react";
@@ -14,11 +14,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../../../../../Together/src/components/ui/Dropdown-menu";
+} from "./ui/Dropdown-menu";
 import { Button } from "./ui/Button";
 import {
   Edit,
-  Heart,
   Image,
   MessageCircle,
   MoreHorizontal,

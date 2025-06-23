@@ -1,9 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContextProvider";
-import { Button } from "./ui/Button";
 import AddComment from "./AddComment";
-import { MessageCircle } from "lucide-react";
-
 function ShowCommentSection({ post, showComments }) {
   const { user } = useContext(AuthContext);
 

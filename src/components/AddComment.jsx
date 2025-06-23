@@ -10,7 +10,6 @@ import { Send } from "lucide-react";
 function AddComment({ post }) {
   const { user } = useContext(AuthContext);
   const [commentText, setCommentText] = useState({});
-
   const handleComment = async (postId, commentText) => {
     if (!user) {
       toast.error("Please log in to comment");

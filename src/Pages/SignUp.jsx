@@ -12,9 +12,10 @@ import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, User, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { toast, Toaster } from "sonner";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../utils/schema";
+
 //firebase imports
 import {
   getAuth,
@@ -23,8 +24,6 @@ import {
 } from "firebase/auth";
 import { db } from "../firebase.config";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
-import { signUpSchema } from "../../utils/schema";
-
 function SignUp() {
   const [generalError, setGeneralError] = useState("");
   const { isDark, toggleTheme } = useContext(ThemeContext);

@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../components/context/AuthContextProvider";
-import { ThemeContext } from "../components/context/ThemeContextProvider";
-
-import NavBar from "./../components/ui/NavBar";
+import NavBar from "../components/ui/NavBar";
 import { Loader2 } from "lucide-react";
 //firebase imports
 import { db } from "../firebase.config";
