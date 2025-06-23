@@ -82,7 +82,7 @@ function NavBar() {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem disabled>
                     <Link
                       to="/profile"
                       className="flex items-center px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-blue-50 dark:hover:bg-zinc-700 hover:text-blue-600 dark:hover:text-violet-400 transition-colors duration-200"
