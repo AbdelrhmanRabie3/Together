@@ -6,10 +6,28 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Mail, MapPin, Globe, Image, Edit2 } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../components/context/AuthContextProvider";
+import { uploadImageToImgBb, validateImage } from "../utils/imageUpload";
+import { updateProfile } from "firebase/auth";
+import { useState } from "react";
 function Profile() {
-  const { user } = useContext(AuthContext);
-  console.log(user);
+  const { user, setUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
+  const updateProfileImage = async (imageFile) => {
+    if (!validateImage(imageFile)) return;
+
+    try {
+      setLoading(true);
+      const imageUrlResponse = await uploadImageToImgBb(imageFile);
+      const url = imageUrlResponse;
+      await updateProfile(user, { photoURL: url });
+      await user.reload();
+      setUser({ ...user });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error updating profile image:", error);
+    }
+  };
   const handleEditProfile = () => {};
   return (
     <>
@@ -19,17 +37,33 @@ function Profile() {
           <Card className="mb-8 shadow-lg border-0 bg-gradient-to-br from-white to-gray-50/50">
             <CardHeader className="pb-8">
               <div className="flex flex-col items-center space-y-6">
-                <div className="relative group">
-                  <Avatar className="h-32 w-32 ring-4 ring-white shadow-xl">
-                    <AvatarImage src={user.photoURL} alt={user.displayName} />
-                    <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                      {user.displayName?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center cursor-pointer">
-                    <Edit2 className="h-6 w-6 text-white" />
+                {loading ? (
+                  <div className="flex items-center justify-center h-32 w-32">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
                   </div>
-                </div>
+                ) : (
+                  <div className="relative group">
+                    <Avatar className="h-32 w-32 ring-4 ring-white shadow-xl">
+                      <AvatarImage src={user.photoURL} alt={user.displayName} />
+                      <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                        {user.displayName?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <label
+                      htmlFor="profileImage"
+                      className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center cursor-pointer"
+                    >
+                      <Edit2 className="h-6 w-6 text-white" />
+                      <input
+                        id="profileImage"
+                        type="file"
+                        className="hidden"
+                        accept="image/jpeg,image/png,image/jpg"
+                        onChange={(e) => updateProfileImage(e.target.files[0])}
+                      />
+                    </label>
+                  </div>
+                )}
                 <div className="text-center space-y-3">
                   <h1 className="text-3xl font-bold text-gray-900">
                     {user.displayName}
