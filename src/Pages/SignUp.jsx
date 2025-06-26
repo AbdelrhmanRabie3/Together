@@ -54,6 +54,7 @@ function SignUp() {
         userId: userCredential.user.uid,
         username: values.username,
         email: values.email,
+        photoURL:null,
         createdAt: serverTimestamp(),
       });
       navigate("/signin");

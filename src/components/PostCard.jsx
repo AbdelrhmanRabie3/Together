@@ -89,7 +89,7 @@ function PostCard({ post }) {
         <CardHeader className="flex flex-row items-center justify-between pt-5">
           <div className="flex items-center gap-3">
             <span className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-tr from-blue-400 to-violet-500 text-white shadow-sm text-lg font-bold">
-              {post.displayName?.charAt(0).toUpperCase()}
+              {user.photoURL?user.photoURL:post.displayName?.charAt(0).toUpperCase()}
             </span>
             <div className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-blue-600 dark:hover:text-violet-400 text-sm">
               {post.displayName}
