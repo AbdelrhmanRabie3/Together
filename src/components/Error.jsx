@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Button } from "./ui/Button";
+import { Button } from "./ui/button";
 import { Home, ArrowLeft, Search, AlertCircle } from "lucide-react";
 
 function Error() {
@@ -22,8 +22,9 @@ function Error() {
             Oops! Page Not Found
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-            The page you're looking for seems to have wandered off into the digital void. 
-            Don't worry, even the best explorers get lost sometimes!
+            The page you're looking for seems to have wandered off into the
+            digital void. Don't worry, even the best explorers get lost
+            sometimes!
           </p>
         </div>
 
@@ -36,7 +37,7 @@ function Error() {
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" />
             Go Back
           </Button>
-          
+
           <Button
             onClick={() => navigate("/")}
             className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-violet-700 dark:from-violet-600 dark:to-purple-800 hover:from-blue-600 hover:to-violet-800 dark:hover:from-violet-700 dark:hover:to-purple-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
@@ -56,7 +57,7 @@ function Error() {
         {/* Fun Message */}
         <div className="mt-8 p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
           <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-            "Not all those who wander are lost... but this page definitely is!" 
+            "Not all those who wander are lost... but this page definitely is!"
             <span className="ml-2">🧭</span>
           </p>
         </div>

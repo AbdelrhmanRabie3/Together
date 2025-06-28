@@ -1,16 +1,16 @@
 import { useContext, useState } from "react";
-import { Button } from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../components/ui/Card";
+} from "../components/ui/card";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import { toast} from "sonner";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "../utils/schema";

@@ -9,8 +9,8 @@ import { db } from "../firebase.config";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContextProvider";
 import { useState } from "react";
-import { Card, CardContent, CardFooter } from "./ui/Card";
-import { Button } from "./ui/Button";
+import { Card, CardContent, CardFooter } from "./ui/card";
+import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Image } from "lucide-react";
 

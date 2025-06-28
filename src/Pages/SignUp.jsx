@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
-import { Button } from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../components/ui/Card";
+} from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Shield, Sun, User, UserRound } from "lucide-react";
@@ -54,7 +54,7 @@ function SignUp() {
         userId: userCredential.user.uid,
         username: values.username,
         email: values.email,
-        photoURL:null,
+        photoURL: null,
         createdAt: serverTimestamp(),
       });
       navigate("/signin");

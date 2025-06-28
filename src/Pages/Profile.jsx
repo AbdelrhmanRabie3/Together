@@ -1,14 +1,24 @@
 import NavBar from "../components/ui/NavBar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Button } from "../components/ui/button";
+
+import { Badge } from "../components/ui/badge";
 import { Calendar, Mail, MapPin, Globe, Image, Edit2 } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../components/context/AuthContextProvider";
 import { uploadImageToImgBb, validateImage } from "../utils/imageUpload";
 import { updateProfile } from "firebase/auth";
 import { useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../firebase.config";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+
 function Profile() {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -22,7 +32,17 @@ function Profile() {
       const url = imageUrlResponse;
       await updateProfile(user, { photoURL: url });
       await user.reload();
-      setUser({ ...user });
+
+      setUser(user);
+      // Update all posts by this user with the new photoURL
+      const postsRef = collection(db, "posts");
+      const q = query(postsRef, where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      const updatePromises = [];
+      querySnapshot.forEach((docSnap) => {
+        updatePromises.push(updateDoc(docSnap.ref, { photoURL: url }));
+      });
+      await Promise.all(updatePromises);
       setLoading(false);
     } catch (error) {
       console.error("Error updating profile image:", error);

@@ -1,7 +1,7 @@
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "sonner";
-import { Button } from "./ui/Button";
+import { Button } from "./ui/button";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContextProvider";
 import { Heart } from "lucide-react";

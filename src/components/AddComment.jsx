@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { AuthContext } from "./context/AuthContextProvider";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
-import { Button } from "./ui/Button";
+import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Send } from "lucide-react";
 

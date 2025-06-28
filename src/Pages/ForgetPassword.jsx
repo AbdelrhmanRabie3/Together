@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { Button } from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../components/ui/Card";
+} from "../components/ui/card";
 import { ThemeContext } from "../components/context/ThemeContextProvider";
 import { Mail, Moon, Sun, Lock } from "lucide-react";
 import { Input } from "../components/ui/input";
