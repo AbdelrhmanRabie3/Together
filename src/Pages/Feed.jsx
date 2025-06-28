@@ -35,8 +35,8 @@ function Feed() {
   if (postsLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-primary animate-fade-in-up">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-600 dark:text-violet-500" />
-        <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+        <Loader2 className="w-12 h-12 animate-spin text-primary/90" />
+        <p className="mt-4 text-sm text-muted-foreground">
           Loading feed...
         </p>
       </div>
@@ -45,8 +45,8 @@ function Feed() {
   return (
     <>
       <NavBar />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 pt-20 pb-8 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen bg-background/95 backdrop-blur-sm pt-20 pb-8 px-4">
+        <div className="max-w-2xl mx-auto space-y-6">
           {user && <PostForm />}
           {posts.map((post) => {
             return <PostCard key={post.id} post={post} />;

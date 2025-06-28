@@ -41,6 +41,7 @@ function PostForm() {
         likes: [],
         comments: [],
         imageUrl,
+        photoURL: user.photoURL || "",
       });
       toast.success("Post created successfully!");
       resetPost();

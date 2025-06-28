@@ -52,20 +52,20 @@ function Profile() {
   return (
     <>
       <NavBar />
-      <div className="min-h-screen mt-15 bg-gray-50/50">
+      <div className="min-h-screen mt-15 bg-background/95 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          <Card className="mb-8 shadow-lg border-0 bg-gradient-to-br from-white to-gray-50/50">
+          <Card className="mb-8 shadow-2xl border-border/50 bg-card/95 backdrop-blur-2xl">
             <CardHeader className="pb-8">
               <div className="flex flex-col items-center space-y-6">
                 {loading ? (
                   <div className="flex items-center justify-center h-32 w-32">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary/90 border-t-transparent" />
                   </div>
                 ) : (
                   <div className="relative group">
-                    <Avatar className="h-32 w-32 ring-4 ring-white shadow-xl">
+                    <Avatar className="h-32 w-32 ring-4 ring-primary/20 shadow-xl">
                       <AvatarImage src={user.photoURL} alt={user.displayName} />
-                      <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                      <AvatarFallback className="text-3xl bg-primary/90 text-primary-foreground">
                         {user.displayName?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -85,20 +85,20 @@ function Profile() {
                   </div>
                 )}
                 <div className="text-center space-y-3">
-                  <h1 className="text-3xl font-bold text-gray-900">
+                  <h1 className="text-3xl font-bold text-foreground">
                     {user.displayName}
                   </h1>
-                  <p className="text-lg text-gray-500">
+                  <p className="text-lg text-muted-foreground">
                     @{user.displayName?.toLowerCase().replace(/\s+/g, "")}
                   </p>
 
                   {user.bio && (
-                    <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
+                    <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed px-4">
                       {user.bio}
                     </p>
                   )}
 
-                  <div className="flex items-center justify-center text-sm text-gray-500 mt-4">
+                  <div className="flex items-center justify-center text-sm text-muted-foreground mt-4">
                     <Calendar className="h-4 w-4 mr-2" />
                     <span>
                       Joined{" | "}
@@ -116,7 +116,7 @@ function Profile() {
 
                 <Button
                   onClick={handleEditProfile}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="bg-primary/90 text-primary-foreground hover:bg-primary px-8 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-xl"
                 >
                   <Edit2 className="h-4 w-4 mr-2" />
                   Edit Profile
@@ -126,53 +126,53 @@ function Profile() {
           </Card>
 
           <div className="">
-            <Card className="shadow-md border-0 bg-white">
+            <Card className="shadow-xl border-border/50 bg-card/95 backdrop-blur-2xl">
               <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold text-gray-900 flex items-center">
+                <CardTitle className="text-2xl font-bold text-foreground flex items-center">
                   Contact Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {user.email && (
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className="p-2 bg-blue-100 rounded-full">
-                      <Mail className="h-4 w-4 text-blue-600" />
+                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors backdrop-blur-xl">
+                    <div className="p-2 bg-primary/10 rounded-full">
+                      <Mail className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Email</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
+                      <p className="text-sm font-medium text-foreground">Email</p>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
                     </div>
                   </div>
                 )}
 
                 {user.location && (
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className="p-2 bg-green-100 rounded-full">
-                      <MapPin className="h-4 w-4 text-green-600" />
+                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors backdrop-blur-xl">
+                    <div className="p-2 bg-primary/10 rounded-full">
+                      <MapPin className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         Location
                       </p>
-                      <p className="text-sm text-gray-600">{user.location}</p>
+                      <p className="text-sm text-muted-foreground">{user.location}</p>
                     </div>
                   </div>
                 )}
 
                 {user.website && (
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className="p-2 bg-purple-100 rounded-full">
-                      <Globe className="h-4 w-4 text-purple-600" />
+                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50 hover:bg-muted/70 transition-colors backdrop-blur-xl">
+                    <div className="p-2 bg-primary/10 rounded-full">
+                      <Globe className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         Website
                       </p>
                       <a
                         href={user.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                        className="text-sm text-primary hover:text-primary/80 transition-colors"
                       >
                         {user.website}
                       </a>

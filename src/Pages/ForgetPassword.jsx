@@ -52,9 +52,9 @@ function ForgetPassword() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 relative">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <Button
-          className="fixed top-5 right-5 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md rounded-full transition-shadow shadow-md hover:shadow-lg text-foreground"
+          className="fixed top-5 right-5 bg-card/50 hover:bg-card/80 backdrop-blur-xl rounded-full transition-all shadow-lg hover:shadow-xl text-foreground"
           onClick={toggleTheme}
           size="icon"
           variant="ghost"
@@ -67,15 +67,15 @@ function ForgetPassword() {
           )}
         </Button>
 
-        <Card className="w-full max-w-md shadow-2xl rounded-3xl border border-zinc-200 dark:border-zinc-800/40 backdrop-blur-lg bg-white/80 dark:bg-zinc-900/95 animate-fade-in-up">
+        <Card className="w-full max-w-md shadow-2xl rounded-3xl border-border/50 backdrop-blur-2xl bg-card/95 animate-fade-in-up">
           <CardHeader className="flex flex-col gap-3 items-center mt-2">
-            <div className="flex justify-center items-center w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-violet-700 shadow-md">
-              <Lock size={32} className="text-white" />
+            <div className="flex justify-center items-center w-16 h-16 rounded-full bg-primary/90 text-primary-foreground shadow-xl ring-2 ring-primary/20">
+              <Lock size={32} />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-center mt-2 mb-0 text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-3xl font-extrabold tracking-tight text-center mt-2 mb-0 text-foreground bg-clip-text">
               Forgot Password
             </h1>
-            <span className="text-zinc-500 dark:text-zinc-400 text-sm text-center font-medium">
+            <span className="text-muted-foreground text-sm text-center font-medium">
               Enter your email to reset your password
             </span>
           </CardHeader>
@@ -88,9 +88,9 @@ function ForgetPassword() {
               )}
               <label
                 htmlFor="email"
-                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-foreground/90"
               >
-                <Mail className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
+                <Mail className="w-4 h-4" />
                 Email
               </label>
               <Input
@@ -98,9 +98,9 @@ function ForgetPassword() {
                 id="email"
                 type="email"
                 placeholder="name@email.com"
-                className={
-                  errors.email ? "border-destructive ring-destructive" : ""
-                }
+                className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
+                  errors.email ? "border-destructive ring-destructive/20" : ""
+                }`}
               />
               {errors.email && (
                 <div className="text-destructive text-xs mt-1 font-medium">
@@ -109,7 +109,7 @@ function ForgetPassword() {
               )}
               <Button
                 type="submit"
-                className="w-full h-11 rounded-xl font-semibold text-base bg-gradient-to-r from-blue-500 to-violet-700 hover:from-blue-600 hover:to-violet-800 focus:ring-2 focus:ring-blue-500/60 focus:outline-none transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
+                className="w-full h-11 rounded-xl font-semibold text-base bg-primary/90 text-primary-foreground hover:bg-primary focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl backdrop-blur-xl"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Sending Email..." : "Send Reset Email"}
@@ -117,20 +117,20 @@ function ForgetPassword() {
             </CardContent>
           </form>
           <CardFooter className="py-6 flex flex-col gap-2">
-            <span className="font-normal text-gray-500 dark:text-gray-300">
+            <span className="text-muted-foreground">
               Remember your password?{" "}
               <Link
                 to="/signin"
-                className="text-primary font-semibold hover:underline"
+                className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
                 Sign In
               </Link>
             </span>
-            <span className="font-normal text-gray-500 dark:text-gray-300">
-              Don’t have an account?{" "}
+            <span className="text-muted-foreground">
+              Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-primary font-semibold hover:underline"
+                className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
                 Sign Up
               </Link>

@@ -76,9 +76,9 @@ function SignUp() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-100 dark:from-zinc-950 dark:to-zinc-900 relative">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <Button
-          className="fixed top-5 right-5 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md rounded-full transition-shadow shadow-md hover:shadow-lg text-foreground"
+          className="fixed top-5 right-5 bg-card/50 hover:bg-card/80 backdrop-blur-xl rounded-full transition-all shadow-lg hover:shadow-xl text-foreground"
           onClick={toggleTheme}
           size="icon"
           variant="ghost"
@@ -86,15 +86,15 @@ function SignUp() {
           {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
 
-        <Card className="w-full max-w-md shadow-2xl rounded-3xl border border-zinc-200 dark:border-zinc-800/40 backdrop-blur-lg bg-white/80 dark:bg-zinc-900/95 animate-fade-in-up">
+        <Card className="w-full max-w-md shadow-2xl rounded-3xl border-border/50 backdrop-blur-2xl bg-card/95 animate-fade-in-up">
           <CardHeader className="flex flex-col gap-3 items-center mt-2">
-            <div className="flex justify-center items-center w-16 h-16 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 shadow-md">
-              <UserRound size={32} className="text-white" />
+            <div className="flex justify-center items-center w-16 h-16 rounded-full bg-primary/90 text-primary-foreground shadow-xl ring-2 ring-primary/20">
+              <UserRound size={32} />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-center mt-2 mb-0 text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-3xl font-extrabold tracking-tight text-center mt-2 mb-0 text-foreground bg-clip-text">
               Sign Up
             </h1>
-            <span className="text-gray-600 dark:text-gray-300 text-base font-medium">
+            <span className="text-muted-foreground text-base font-medium">
               Join thousands of users worldwide ✨
             </span>
           </CardHeader>
@@ -107,9 +107,9 @@ function SignUp() {
               )}
               <label
                 htmlFor="fullName"
-                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-foreground/90"
               >
-                <User className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
+                <User className="w-4 h-4" />
                 UserName
               </label>
               <Input
@@ -117,16 +117,16 @@ function SignUp() {
                 id="username"
                 type="text"
                 placeholder="e.g. Abdelrhman Rabie"
-                className={
-                  errors.username ? "border-destructive ring-destructive" : ""
-                }
+                className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
+                  errors.username ? "border-destructive ring-destructive/20" : ""
+                }`}
               />
 
               <label
                 htmlFor="email"
-                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-foreground/90"
               >
-                <Mail className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
+                <Mail className="w-4 h-4" />
                 Email
               </label>
               <Input
@@ -134,9 +134,9 @@ function SignUp() {
                 id="email"
                 type="email"
                 placeholder="name@email.com"
-                className={
-                  errors.email ? "border-destructive ring-destructive" : ""
-                }
+                className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
+                  errors.email ? "border-destructive ring-destructive/20" : ""
+                }`}
               />
               {errors.email && (
                 <div className="text-destructive text-xs mt-1 font-medium">
@@ -145,18 +145,18 @@ function SignUp() {
               )}
               <label
                 htmlFor="password"
-                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-foreground/90"
               >
-                <Shield className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
+                <Shield className="w-4 h-4" />
                 Password
               </label>
               <Input
                 {...register("password")}
                 id="password"
                 type="password"
-                className={
-                  errors.password ? "border-destructive ring-destructive" : ""
-                }
+                className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
+                  errors.password ? "border-destructive ring-destructive/20" : ""
+                }`}
               />
               {errors.password && (
                 <div className="text-destructive text-xs mt-1 font-medium">
@@ -165,9 +165,9 @@ function SignUp() {
               )}
               <label
                 htmlFor="confirmPassword"
-                className="flex items-center gap-2 text-sm font-bold text-zinc-800 dark:text-zinc-200"
+                className="flex items-center gap-2 text-sm font-bold text-foreground/90"
               >
-                <Shield className="w-4 h-4 text-zinc-800 dark:text-zinc-200" />
+                <Shield className="w-4 h-4" />
                 Confirm Password
               </label>
               <Input
@@ -175,11 +175,9 @@ function SignUp() {
                 id="confirmPassword"
                 type="password"
                 placeholder="Type password again"
-                className={
-                  errors.confirmPassword
-                    ? "border-destructive ring-destructive"
-                    : ""
-                }
+                className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
+                  errors.confirmPassword ? "border-destructive ring-destructive/20" : ""
+                }`}
               />
               {errors.confirmPassword && (
                 <div
@@ -191,27 +189,24 @@ function SignUp() {
               )}
               <Button
                 type="submit"
-                className="w-full h-11 rounded-xl font-semibold text-base bg-gradient-to-r from-blue-500 to-violet-700 hover:from-blue-600 hover:to-violet-800 focus:ring-2 focus:ring-blue-500/60 focus:outline-none transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg"
+                className="w-full h-11 rounded-xl font-semibold text-base bg-primary/90 text-primary-foreground hover:bg-primary focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl backdrop-blur-xl"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
               {errors.username && (
-                <div
-                  className="text-destructive text-xs mt-1 font-medium"
-                  id="username-error"
-                >
+                <div className="text-destructive text-xs mt-1 font-medium">
                   {errors.username.message}
                 </div>
               )}
             </CardContent>
           </form>
           <CardFooter className="py-6">
-            <span className="font-normal text-gray-500 dark:text-gray-300">
-              Already have an account?
+            <span className="text-muted-foreground">
+              Already have an account?{" "}
               <Link
                 to="/signin"
-                className="ml-1 text-primary font-semibold hover:underline"
+                className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
                 Sign In
               </Link>
