@@ -41,9 +41,10 @@ function ProfilePicture() {
       setLoading(true);
       const imageUrlResponse = await uploadImageToImgBb(imageFile);
       const url = imageUrlResponse;
-      await updateProfile(user, { photoURL: url });
-      await user.reload();
-      setUser({ ...user });
+      const auth = getAuth();
+      await updateProfile(auth.currentUser, { photoURL: url });
+      await auth.currentUser.reload();
+      setUser({ ...auth.currentUser });
       editAllUserPostsPhotoURL(url);
       setLoading(false);
       toast.success("Profile image updated successfully!");
@@ -57,9 +58,10 @@ function ProfilePicture() {
   const removeProfileImage = async () => {
     try {
       setLoading(true);
-      await updateProfile(user, { photoURL: "" });
-      await user.reload();
-      setUser({ ...user });
+      const auth = getAuth();
+      await updateProfile(auth.currentUser, { photoURL: "" });
+      await auth.currentUser.reload();
+      setUser({ ...auth.currentUser });
       editAllUserPostsPhotoURL("");
       setShowRemoveConfirm(false);
       toast.success("Profile picture removed successfully");

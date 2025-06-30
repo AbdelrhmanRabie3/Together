@@ -113,6 +113,7 @@ function SignIn() {
                 {...register("password")}
                 id="password"
                 type="password"
+                placeholder="Type your password"
                 className={`dark:bg-input dark:text-foreground dark:placeholder:text-muted-foreground/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 ${
                   errors.password ? "border-destructive ring-destructive/20" : ""
                 }`}
