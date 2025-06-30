@@ -18,12 +18,13 @@ import { AuthContext } from "../context/AuthContextProvider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema } from "./../../utils/schema";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import { toast } from "sonner";
+import { getAuth } from "firebase/auth";
 function EditUserProfile({ showEditModal, setShowEditModal }) {
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const {
     register,
@@ -67,8 +68,16 @@ function EditUserProfile({ showEditModal, setShowEditModal }) {
       },
     };
     try {
+      const auth = getAuth();
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, updatedData);
+      await auth.currentUser.reload();
+      const userSnap = await getDoc(userRef);
+      const firestoreData = userSnap.data();
+      setUser((prevUser) => ({
+        ...prevUser,
+        ...firestoreData,
+      }));
       setLoading(false);
       setShowEditModal(false);
       toast.success("Profile updated successfully!");

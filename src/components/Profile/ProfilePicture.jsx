@@ -44,7 +44,10 @@ function ProfilePicture() {
       const auth = getAuth();
       await updateProfile(auth.currentUser, { photoURL: url });
       await auth.currentUser.reload();
-      setUser({ ...auth.currentUser });
+      setUser((prevUser) => ({
+        ...prevUser,
+        photoURL: auth.currentUser.photoURL,
+      }));
       editAllUserPostsPhotoURL(url);
       setLoading(false);
       toast.success("Profile image updated successfully!");
@@ -61,7 +64,10 @@ function ProfilePicture() {
       const auth = getAuth();
       await updateProfile(auth.currentUser, { photoURL: "" });
       await auth.currentUser.reload();
-      setUser({ ...auth.currentUser });
+      setUser((prevUser) => ({
+        ...prevUser,
+        photoURL: "",
+      }));
       editAllUserPostsPhotoURL("");
       setShowRemoveConfirm(false);
       toast.success("Profile picture removed successfully");
