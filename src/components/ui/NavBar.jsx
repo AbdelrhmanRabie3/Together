@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContextProvider";
 import { LogOut, Moon, Sun, UserRound } from "lucide-react";
 import { Button } from "./button";
@@ -14,7 +14,7 @@ import {
 import { AuthContext } from "../context/AuthContextProvider";
 function NavBar() {
   const { isDark, toggleTheme } = useContext(ThemeContext);
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const auth = getAuth();
   const navigate = useNavigate();
 

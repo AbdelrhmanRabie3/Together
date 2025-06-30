@@ -14,7 +14,7 @@ function ProfileHeader() {
       <Card className="mb-8 shadow-2xl border-border/50 bg-card/95 backdrop-blur-2xl">
         <CardHeader className="pb-8">
           <div className="flex flex-col items-center space-y-6">
-            <ProfilePicture user={user} />
+            <ProfilePicture />
             <div className="text-center space-y-3">
               <h1 className="text-3xl font-bold text-foreground">
                 {user.displayName}
