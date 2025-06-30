@@ -14,10 +14,7 @@ export const signInSchema = z.object({
       message: "Email is required.",
     })
     .email("Invalid email format"),
-  password: z
-    .string()
-    .trim()
-    .min(6, "Password must be at least 6 characters"),
+  password: z.string().trim().min(6, "Password must be at least 6 characters"),
 });
 
 export const signUpSchema = z
@@ -48,8 +45,35 @@ export const forgotPasswordSchema = z.object({
 export const profileSchema = z.object({
   displayName: z.string().min(1, "Display name is required."),
   bio: z.string().max(500, "Bio must be less than 500 characters.").optional(),
-  location: z.string().max(100, "Location must be less than 100 characters.").optional(),
-  phone: z.string().max(20, "Phone must be less than 20 characters.").optional(),
+  location: z
+    .string()
+    .max(100, "Location must be less than 100 characters.")
+    .optional(),
+  phone: z
+    .string()
+    .max(20, "Phone must be less than 20 characters.")
+    .optional(),
   website: z.string().url("Invalid website URL.").optional().or(z.literal("")),
-  occupation: z.string().max(100, "Occupation must be less than 100 characters.").optional(),
-}); 
+  occupation: z
+    .string()
+    .max(100, "Occupation must be less than 100 characters.")
+    .optional(),
+  company: z
+    .string()
+    .max(100, "Company must be less than 100 characters.")
+    .optional(),
+  social: z
+    .object({
+      github: z
+        .string()
+        .url("Invalid GitHub URL.")
+        .optional()
+        .or(z.literal("")),
+      linkedin: z
+        .string()
+        .url("Invalid LinkedIn URL.")
+        .optional()
+        .or(z.literal("")),
+    })
+    .optional(),
+});
