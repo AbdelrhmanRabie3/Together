@@ -5,8 +5,8 @@ import { Loader2 } from "lucide-react";
 //firebase imports
 import { db } from "../firebase.config";
 import { collection, onSnapshot } from "firebase/firestore";
-import PostForm from "../components/PostForm";
-import PostCard from "../components/PostCard";
+import PostForm from "../components/Feed/PostForm";
+import PostCard from "../components/Feed/PostCard";
 
 function Feed() {
   const [posts, setPosts] = useState([]);

@@ -1,21 +1,21 @@
 import { toast } from "sonner";
-import { uploadImageToImgBb, validateImage } from "../utils/imageUpload";
+import { uploadImageToImgBb, validateImage } from "../../utils/imageUpload";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { postSchema } from "../utils/schema";
+import { postSchema } from "../../utils/schema";
 import { deleteDoc, doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { useContext } from "react";
-import { AuthContext } from "./context/AuthContextProvider";
+import { AuthContext } from "../context/AuthContextProvider";
 import { useState } from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/Dropdown-menu";
-import { Button } from "./ui/button";
+} from "../ui/Dropdown-menu";
+import { Button } from "../ui/button";
 import {
   Edit,
   Image,
@@ -23,7 +23,7 @@ import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import Likes from "./Likes";
 import ShowCommentSection from "./ShowCommentSection";
 

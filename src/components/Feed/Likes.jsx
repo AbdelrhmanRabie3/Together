@@ -1,9 +1,9 @@
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useContext } from "react";
-import { AuthContext } from "./context/AuthContextProvider";
+import { AuthContext } from "../context/AuthContextProvider";
 import { Heart } from "lucide-react";
 
 function Likes({ post, isLiked, likesCount }) {

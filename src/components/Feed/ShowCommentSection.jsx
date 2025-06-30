@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "./context/AuthContextProvider";
+import { AuthContext } from "../context/AuthContextProvider";
 import AddComment from "./AddComment";
 function ShowCommentSection({ post, showComments }) {
   const { user } = useContext(AuthContext);

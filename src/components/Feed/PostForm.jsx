@@ -1,17 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { postSchema } from "../utils/schema";
-import { validateImage } from "../utils/imageUpload";
-import { uploadImageToImgBb } from "../utils/imageUpload";
+import { postSchema } from "../../utils/schema";
+import { validateImage } from "../../utils/imageUpload";
+import { uploadImageToImgBb } from "../../utils/imageUpload";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { toast } from "sonner";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { useContext } from "react";
-import { AuthContext } from "./context/AuthContextProvider";
+import { AuthContext } from "../context/AuthContextProvider";
 import { useState } from "react";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Card, CardContent, CardFooter } from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { Image } from "lucide-react";
 
 function PostForm() {

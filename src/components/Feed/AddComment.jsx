@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { toast } from "sonner";
-import { AuthContext } from "./context/AuthContextProvider";
+import { AuthContext } from "../context/AuthContextProvider";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase.config";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { db } from "../../firebase.config";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { Send } from "lucide-react";
 
 function AddComment({ post }) {
