@@ -77,6 +77,8 @@ function EditUserProfile({ showEditModal, setShowEditModal }) {
       setUser((prevUser) => ({
         ...prevUser,
         ...firestoreData,
+        photoURL: auth.currentUser.photoURL,
+        displayName: auth.currentUser.displayName,
       }));
       setLoading(false);
       setShowEditModal(false);
